@@ -38,9 +38,7 @@ const Home = ({ games }) => {
   return (
     <div className="container">
       <div className="text-center mb-2">
-        <h2 className="border p-2 d-inline-block mt-4">
-          Unity Games
-        </h2>
+        <img src="https://seeklogo.com/images/U/unity-logo-555C5D1D7E-seeklogo.com.png" alt=" " style={{width:"7rem", background:"white", margin:"1%",borderRadius:"10px"}}/>
       </div>
 
       <Form.Control
