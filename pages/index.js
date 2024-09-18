@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Table } from "react-bootstrap";
 import axios from "axios";
+import Link from "next/link";
 
 const Home = ({ games }) => {
   const [searchItem, setSearchItem] = useState("");
@@ -38,7 +39,16 @@ const Home = ({ games }) => {
   return (
     <div className="container">
       <div className="text-center mb-2">
-        <img src="https://seeklogo.com/images/U/unity-logo-555C5D1D7E-seeklogo.com.png" alt=" " style={{width:"7rem", background:"white", margin:"1%",borderRadius:"10px"}}/>
+        <img
+          src="https://seeklogo.com/images/U/unity-logo-555C5D1D7E-seeklogo.com.png"
+          alt=" "
+          style={{
+            width: "7rem",
+            background: "white",
+            margin: "1%",
+            borderRadius: "10px",
+          }}
+        />
       </div>
 
       <Form.Control
@@ -48,22 +58,18 @@ const Home = ({ games }) => {
         onChange={handleSearch}
         className="text-black mb-4"
       />
-      <Button
-        onClick={handleSort}
-        variant="success"
-        className="m-3"
-      >
+      <Button onClick={handleSort} variant="success" className="m-3">
         Sort by Platform {sortedByPlatform ? "(Z-A)" : "(A-Z)"}
       </Button>
-      <Button
-        onClick={resetGames}
-        variant="warning"
-      >
+      <Button onClick={resetGames} variant="warning">
         Reset
       </Button>
       <Table striped bordered hover variant="dark" className="mt-4">
         <thead className="text-center">
           <tr>
+            <th>
+              <u>Image</u>
+            </th>
             <th>
               <u>Title</u>
             </th>
@@ -71,13 +77,13 @@ const Home = ({ games }) => {
               <u>Platform</u>
             </th>
             <th>
-              <u>Score</u>
+              <u>Description</u>
             </th>
             <th>
               <u>Genre</u>
             </th>
             <th>
-              <u>Editor's Choice</u>
+              <u>Game Link</u>
             </th>
           </tr>
         </thead>
@@ -86,16 +92,26 @@ const Home = ({ games }) => {
             (game, index) =>
               game.title && (
                 <tr key={index}>
+                  <td>
+                    <img
+                      src={game.thumbnail}
+                      alt={game.title}
+                      width="100"
+                      height="100"
+                    />
+                  </td>
                   <td>{game.title}</td>
                   <td>{game.platform}</td>
                   <td>
-                    <center>{game.score}</center>
+                    <center>{game.short_description}</center>
                   </td>
                   <td>
                     <center>{game.genre}</center>
                   </td>
                   <td>
-                    <center>{game.editors_choice === "Y" ? "Yes" : "No"}</center>
+                    <center>
+                      <Link href={game.game_url}>{game.game_url}</Link>
+                    </center>
                   </td>
                 </tr>
               )
@@ -108,9 +124,7 @@ const Home = ({ games }) => {
 
 export async function getServerSideProps() {
   try {
-    const response = await axios.get(
-      "https://s3-ap-southeast-1.amazonaws.com/he-public-data/gamesarena274f2bf.json"
-    );
+    const response = await axios.get("https://www.freetogame.com/api/games"); //previous api --> https://s3-ap-southeast-1.amazonaws.com/he-public-data/gamesarena274f2bf.json
     const games = response.data;
     return {
       props: { games },
